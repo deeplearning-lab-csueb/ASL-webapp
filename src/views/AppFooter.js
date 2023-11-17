@@ -84,12 +84,12 @@ export default function AppFooter() {
               Legal
             </Typography>
             <Box component="ul" sx={{ m: 0, listStyle: 'none', p: 0 }}>
-              <Box component="li" sx={{ py: 0.5 }}>
+              {/* <Box component="li" sx={{ py: 0.5 }}>
                 <RouterLink to="/">Terms</RouterLink>
               </Box>
               <Box component="li" sx={{ py: 0.5 }}>
                 <RouterLink to="/">Privacy</RouterLink>
-              </Box>
+              </Box> */}
             </Box>
           </Grid>
           <Grid item xs={6} sm={8} md={4}>
