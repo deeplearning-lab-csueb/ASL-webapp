@@ -1,0 +1,75 @@
+{
+  "name": "brave-spaces",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@aws-amplify/ui-react": "^5.0.4",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mediapipe/camera_utils": "^0.3.1675466862",
+    "@mediapipe/control_utils": "^0.6.1675466023",
+    "@mediapipe/drawing_utils": "^0.3.1675466124",
+    "@mediapipe/face_mesh": "^0.4.1633559619",
+    "@mediapipe/holistic": "^0.5.1675471629",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/joy": "^5.0.0-beta.10",
+    "@mui/lab": "^5.0.0-alpha.135",
+    "@mui/material": "^5.14.9",
+    "@mui/x-data-grid": "^6.7.0",
+    "@mui/x-data-grid-generator": "^6.9.1",
+    "@nivo/bar": "^0.83.0",
+    "@nivo/boxplot": "^0.83.0",
+    "@nivo/line": "^0.83.0",
+    "@nivo/pie": "^0.83.0",
+    "@tensorflow/tfjs": "^4.12.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "antd": "^5.6.1",
+    "aws-amplify": "^5.3.3",
+    "axios": "^1.4.0",
+    "framer-motion": "^10.12.12",
+    "html2canvas": "^1.4.1",
+    "markdown-to-jsx": "^7.2.0",
+    "react": "^18.2.0",
+    "react-anchor-link-smooth-scroll": "^1.0.12",
+    "react-dom": "^18.2.0",
+    "react-final-form": "^6.5.9",
+    "react-media-recorder": "^1.6.6",
+    "react-router-dom": "^6.11.2",
+    "react-scripts": "5.0.1",
+    "react-spreadsheet": "^0.8.3",
+    "react-spring": "^9.7.1",
+    "react-webcam": "^7.1.1",
+    "recharts": "^2.6.2",
+    "use-count-up": "^3.0.1",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "gh-pages": "^6.0.0"
+  }
+}
