@@ -9,7 +9,8 @@ import * as cam from "@mediapipe/camera_utils";
 import Webcam from "react-webcam";
 import * as tf from "@tensorflow/tfjs";
 import signMap from '../sign_to_prediction_index_map.json';
-
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 function AboutUs() {
   const backgroundDots = "/productCTAImageDots.png";
   const holisticRef = useRef(null);
@@ -17,6 +18,7 @@ function AboutUs() {
   const canvasRef = useRef(null);
   const [prediction, setPrediction] = React.useState(null);
   const [camera, setCamera] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   // const connect = window.drawConnectors;
   let sequenceData = []
   let detectionModel = null;
@@ -31,6 +33,7 @@ function AboutUs() {
 
   const loadASLmodel = async () => {
     detectionModel = await tf.loadGraphModel('https://asldetectionmodelversion2.s3.us-east-2.amazonaws.com/model.json')
+    console.log("model loaded")
   };
 
   const extractCoordinates = (results) => {
@@ -47,6 +50,7 @@ function AboutUs() {
   };
 
   const onResults = async (results) => {
+
     // console.log(results);
     // const video = webcamRef.current.video;
     const videoWidth = webcamRef.current.video.videoWidth;
@@ -72,9 +76,9 @@ function AboutUs() {
     if (sequenceData.length === 100) {
       const tensorData = tf.tensor(sequenceData, [100, 543, 3], 'float32');
       let output = await detectionModel.predictAsync(tensorData);
+      setLoading(false);
       // output=tf.tensor(output, [250], 'float32');
       // output.array().then(array => console.log(array));
-
       let sign = tf.argMax(output.flatten());
       // sign.array().then(array => console.log(array))
       console.log("result", decoder(sign));
@@ -105,6 +109,7 @@ function AboutUs() {
       webcamRef.current = new cam.Camera(webcamRef.current.video, {
         onFrame: async () => {
           await holisticRef.current.send({ image: webcamRef.current.video });
+
         },
         width: 640,
         height: 480,
@@ -118,19 +123,31 @@ function AboutUs() {
 
 
   return (
-    <><Typography variant="h4" marked="center" align="center" component="h2">
-      Try Signing below!
-    </Typography>
-      <Typography variant="h6" marked="center" align="center" component="span" sx={{display:'flex', justifyContent:'center'}}>
+    <>
+
+
+      <Typography variant="h4" marked="center" align="center" component="h2">
+        Try Signing below!
+      </Typography>
+      <Typography variant="h6" marked="center" align="center" component="span" sx={{ display: 'flex', justifyContent: 'center' }}>
         Pridiction:
       </Typography>
       {/* <Button varient="contained" onClick={() => setCamera(!camera)}>
         Toggle Camera
       </Button> */}
       {/* {camera && <> */}
-      <Typography variant="h3"  align="center" component="span">
+      <Typography variant="h3" align="center" component="span">
         <p style={{ color: '#3ab09e' }}> {prediction}</p>
       </Typography>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1, display: 'flex', justifyContent: 'center', flexDirection: 'column' }}
+        open={loading}
+      // onClick={handleClose}
+      ><Typography variant="h3" align="center" component="span">
+          <p style={{ color: '#3ab09e' }}> Please Wait, Loading Model</p>
+        </Typography>
+        <div><CircularProgress color="inherit" /></div>
+      </Backdrop>
       <Container component="section" sx={{ mt: 10, mb: 10, display: "flex", minHeight: '500px' }} id="try">
         <center>
           <div className="App">
