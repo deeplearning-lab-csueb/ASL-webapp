@@ -11,6 +11,11 @@ import * as tf from "@tensorflow/tfjs";
 import signMap from '../sign_to_prediction_index_map.json';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import * as Facemesh from "@mediapipe/face_mesh";
+// import * as Hands from "@mediapipe/hands";
+// import * as Pose from "@mediapipe/pose";
+import * as h from "@mediapipe/holistic";
+// faceLandmarks, poseLandmarks, leftHandLandmarks, rightHandLandmarks
 function AboutUs() {
   const backgroundDots = "/productCTAImageDots.png";
   const holisticRef = useRef(null);
@@ -19,7 +24,7 @@ function AboutUs() {
   const [prediction, setPrediction] = React.useState(null);
   const [camera, setCamera] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
-  // const connect = window.drawConnectors;
+  const connect = window.drawConnectors;
   let sequenceData = []
   let detectionModel = null;
   let p2sMap = {};
@@ -71,18 +76,50 @@ function AboutUs() {
       canvasElement.width,
       canvasElement.height
     );
+    // if (results.faceLandmarks) {
+    //   for (const landmarks of results.faceLandmarks) {
+    //     connect(canvasCtx, landmarks, Facemesh.FACEMESH_TESSELATION, {
+    //       color: "#C0C0C070",
+    //       lineWidth: 1,
+    //     });
+    //     connect(canvasCtx, landmarks, Facemesh.FACEMESH_RIGHT_EYE, {
+    //       color: "#FF3030",
+    //     });
+    //     connect(canvasCtx, landmarks, Facemesh.FACEMESH_RIGHT_EYEBROW, {
+    //       color: "#FF3030",
+    //     });
+    //     connect(canvasCtx, landmarks, Facemesh.FACEMESH_LEFT_EYE, {
+    //       color: "#30FF30",
+    //     });
+    //     connect(canvasCtx, landmarks, Facemesh.FACEMESH_LEFT_EYEBROW, {
+    //       color: "#30FF30",
+    //     });
+    //     connect(canvasCtx, landmarks, Facemesh.FACEMESH_FACE_OVAL, {
+    //       color: "#E0E0E0",
+    //     });
+    //     connect(canvasCtx, landmarks, Facemesh.FACEMESH_LIPS, {
+    //       color: "#E0E0E0",
+    //     });
+    //   }
+    // }
     let landmarks = extractCoordinates(results);
     sequenceData.push(landmarks);
-    if (sequenceData.length === 100) {
-      const tensorData = tf.tensor(sequenceData, [100, 543, 3], 'float32');
+    if (sequenceData.length === 50) {
+      const tensorData = tf.tensor(sequenceData, [50, 543, 3], 'float32');
       let output = await detectionModel.predictAsync(tensorData);
       setLoading(false);
       // output=tf.tensor(output, [250], 'float32');
       // output.array().then(array => console.log(array));
       let sign = tf.argMax(output.flatten());
-      // sign.array().then(array => console.log(array))
-      console.log("result", decoder(sign));
-      setPrediction(decoder(sign))
+      let confidence = output.flatten().max().dataSync()[0];
+      if (parseFloat(confidence) < 0.6 || decoder(sign) === "shower" || decoder(sign) === "garbage") {
+        setPrediction("please try again!")
+      } else {
+        setPrediction(decoder(sign))
+      }
+      // Get the maximum confidence value
+      console.log("result", decoder(sign), "confidence", confidence);
+
       sequenceData = [];
     }
     canvasCtx.restore();
@@ -96,7 +133,7 @@ function AboutUs() {
       }
     });
     holisticRef.current.setOptions({
-      minDetectionConfidence: 0.5,
+      minDetectionConfidence: 0.6,
       minTrackingConfidence: 0.5
     });
     holisticRef.current.onResults(onResults);
@@ -126,27 +163,28 @@ function AboutUs() {
     <>
 
 
-      <Typography variant="h4" marked="center" align="center" component="h2">
+      <Typography variant="h2" marked="center" align="center" component="h2" sx={{marginTop:"5 rem"}}>
         Try Signing below!
       </Typography>
-      <Typography variant="h6" marked="center" align="center" component="span" sx={{ display: 'flex', justifyContent: 'center' }}>
+      {/* <Typography variant="h6" marked="center" align="center" component="span" sx={{ display: 'flex', justifyContent: 'center' }}>
         Pridiction:
-      </Typography>
+      </Typography> */}
       {/* <Button varient="contained" onClick={() => setCamera(!camera)}>
         Toggle Camera
       </Button> */}
       {/* {camera && <> */}
-      <Typography variant="h3" align="center" component="span">
-        <p style={{ color: '#3ab09e' }}> {prediction}</p>
+      <Box sx={{marginTop:"20 px"}}></Box>
+      <Typography variant="h4" align="center" component="h4" sx={{display:"flex", justifyContent:"center", marginTop:"10 px", fontSize:"14 px"}}>
+      Pridiction:<span style={{ color: '#3ab09e' }}> {prediction}</span>
       </Typography>
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1, display: 'flex', justifyContent: 'center', flexDirection: 'column' }}
         open={loading}
       // onClick={handleClose}
       ><Typography variant="h3" align="center" component="span">
-          <p style={{ color: '#3ab09e' }}> Please Wait, Loading Model</p>
+          <p style={{ color: '#3ab09e' }}> Loading...</p>
         </Typography>
-        <div><CircularProgress color="inherit" /></div>
+        <div><CircularProgress sx={{ color: "#3ab09e" }} /></div>
       </Backdrop>
       <Container component="section" sx={{ mt: 10, mb: 10, display: "flex", minHeight: '500px' }} id="try">
         <center>

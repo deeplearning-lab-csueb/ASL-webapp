@@ -59,23 +59,16 @@ export default function AppFooter() {
               sx={{ height: 120 }}
             >
               <Grid item sx={{ display: 'flex' }}>
-                <Box component="a" href="tel:+6197870856" sx={iconStyle}>
-                  <img
-                    src="/phone.png"
-                    alt="Phone"
-                  />
-                </Box>
-                <Box component="a" href="mailto:bravespacesllc@gmail.com" sx={iconStyle}>
-                  <img
-                    src="/mail.png"
-                    alt="email"
-                  />
-                </Box>
               </Grid>
               <Grid item>
-                <Typography variant="body2" color="textSecondary">
+                {/* <Typography variant="body2" color="textSecondary">
                   &copy; {new Date().getFullYear()} ASL learning
                 </Typography>
+                <Typography variant="caption">
+                  <MuiLink href="https://popsign.org" rel="sponsored" title="Freepik">
+                    Video Source:popsign.org
+                  </MuiLink>
+                </Typography> */}
               </Grid>
             </Grid>
           </Grid>
@@ -90,6 +83,14 @@ export default function AppFooter() {
               <Box component="li" sx={{ py: 0.5 }}>
                 <RouterLink to="/">Privacy</RouterLink>
               </Box> */}
+              <Typography variant="body2" color="textSecondary">
+                &copy; {new Date().getFullYear()} ASL learning
+              </Typography>
+              <Typography variant="caption">
+                <MuiLink href="https://popsign.org" rel="sponsored" title="Freepik">
+                  Video Source:popsign.org
+                </MuiLink>
+              </Typography>
             </Box>
           </Grid>
           <Grid item xs={6} sm={8} md={4}>
@@ -112,7 +113,7 @@ export default function AppFooter() {
               ))}
             </TextField>
           </Grid>
-          <Grid item>
+          {/* <Grid item>
             <Typography variant="caption">
               {'Icons made by '}
               <MuiLink href="https://www.freepik.com" rel="sponsored" title="Freepik">
@@ -138,12 +139,8 @@ export default function AppFooter() {
                 pexels
               </MuiLink>
             </Typography>
-          </Grid>
-          <Typography variant="caption">
-            <MuiLink href="https://popsign.org" rel="sponsored" title="Freepik">
-              Video Source:popsign.org
-            </MuiLink>
-          </Typography>
+          </Grid> */}
+
         </Grid>
       </Container>
     </Typography>

@@ -5,7 +5,7 @@ import AppBar from "../components/AppBar";
 import Toolbar from "../components/Toolbar";
 import { useMediaQuery } from "@mui/material";
 import { useState } from "react";
-
+// import ASLlogo from '../asllogo.png'
 const rightLink = {
   fontSize: 16,
   // color: "common.black",
@@ -39,12 +39,12 @@ const AppAppBar = (props) => {
               href="/"
             > */}
               <img
-                src="/asllogo.png"
-                alt="Brave Spaces"
-                maxWidth="10%"
+                src="/ASL-webapp/asllogo.png"
+                alt="asl logo"
                 // style={{ width: "40vh", height: "10vh" }}
                 style={{ display: "flex", maxWidth: "50%", minWidth: "5em" }}
               />
+              {/* <ASLlogo/> */}
             {/* </Link> */}
           </Box>
           {isDesktop ? (

@@ -4,17 +4,18 @@ import { styled } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from "../components/Typography";
-
-import dad from '../dad.mp4';
-import mom from '../mom.mp4';
-import thankyou from '../thankyou.mp4';
+import Thirsty from '../Thirsty.mp4';
+import hungry from '../hungry.mp4';
+import brother from '../brother.mp4';
 import help from '../help.mp4';
-import please from '../please.mp4';
+import no from '../no.mp4';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import Button from '@mui/material/Button';
 
 const MainBannerLayoutRoot = styled('section')(({ theme }) => ({
   color: theme.palette.common.white,
@@ -43,32 +44,46 @@ const Background = styled(Box)(({ opacity }) => ({
 
 function MainBannerLayout(props) {
   const { sxBackground, children, backgroundOpacity } = props;
-  const [chartType, setChartType] = React.useState('Thankyou');
-
+  const [chartType, setChartType] = React.useState('Thirsty');
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleOpen = () => {
+    setOpen(true);
+  };
   const handleChange = (event) => {
     setChartType(event.target.value);
   };
   const chooseVideo = (name) => {
     switch (name) {
-      case "Dad": return dad; break;
-      case "Mom": return mom; break;
-      case "Thankyou": return thankyou; break;
+      case "Thirsty": return Thirsty; break;
+      case "hungry": return hungry; break;
+      case "brother": return brother; break;
       case "Help": return help; break;
-      case "Please": return please; break;
-      default: return thankyou; break;
+      case "no": return no; break;
+      default: return Thirsty; break;
     }
   };
 
   return (
     <MainBannerLayoutRoot>
       <Typography variant="h4" marked="center" align="center" component="h2">
-        PRACTICE 
+        PRACTICE
       </Typography>
-      <Box sx={{ display: "flex", justifyContent: "center",paddingTop: "1em" }}>
+      <Box sx={{ display: "flex", justifyContent: "center", paddingTop: "1em" }}>
         <video src={chooseVideo(chartType)} autoPlay loop muted style={{ objectFit: 'contain', width: '70%', height: '10%', display: "block", boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px" }}>
           Your browser does not support the video tag.
         </video></Box>
-      <Box sx={{ paddingTop: "1em", paddingBottom: "3em", display: "flex", justifyContent: "center" }}>*Video Source:popsign.org 
+      {/* <Button onClick={handleOpen}>Show backdrop</Button>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={open}
+        onClick={handleClose}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop> */}
+      <Box sx={{ paddingTop: "1em", paddingBottom: "3em", display: "flex", justifyContent: "center" }}>
         <FormControl >
           <InputLabel id="demo-simple-select-label">ASL</InputLabel>
           <Select
@@ -77,11 +92,12 @@ function MainBannerLayout(props) {
             value={chartType}
             label="Age"
             onChange={handleChange}
+            sx={{backgroundColor:"#3ab09e",color:"white"}}
           >
-            <MenuItem value={"Dad"}>Dad</MenuItem>
-            <MenuItem value={"Please"}>Please </MenuItem>
-            <MenuItem value={"Mom"}>Mom </MenuItem>
-            <MenuItem value={"Thankyou"}>Thankyou  </MenuItem>
+            <MenuItem value={"Thirsty"}>Thirsty</MenuItem>
+            <MenuItem value={"no"}>No </MenuItem>
+            <MenuItem value={"hungry"}>Hungry </MenuItem>
+            <MenuItem value={"brother"}>Brother  </MenuItem>
             <MenuItem value={"Help"}>Help  </MenuItem>
           </Select>
         </FormControl></Box>
