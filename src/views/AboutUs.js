@@ -175,7 +175,7 @@ function AboutUs() {
       {/* {camera && <> */}
       <Box sx={{marginTop:"20 px"}}></Box>
       <Typography variant="h4" align="center" component="h4" sx={{display:"flex", justifyContent:"center", marginTop:"10 px", fontSize:"14 px"}}>
-      Pridiction:<span style={{ color: '#3ab09e' }}> {prediction}</span>
+      Prediction:<span style={{ color: '#3ab09e' }}> {prediction}</span>
       </Typography>
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1, display: 'flex', justifyContent: 'center', flexDirection: 'column' }}
