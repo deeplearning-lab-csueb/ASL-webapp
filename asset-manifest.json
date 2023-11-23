@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/ASL-webapp/static/css/main.e6c13ad2.css",
-    "main.js": "/ASL-webapp/static/js/main.fa6559d3.js",
+    "main.js": "/ASL-webapp/static/js/main.be49f7f5.js",
     "static/js/787.030fba0a.chunk.js": "/ASL-webapp/static/js/787.030fba0a.chunk.js",
     "static/media/no.mp4": "/ASL-webapp/static/media/no.83f66cb3b296db07e22a.mp4",
     "static/media/hungry.mp4": "/ASL-webapp/static/media/hungry.4816b7004a509466ba0f.mp4",
@@ -11,11 +11,11 @@
     "static/media/terms.md": "/ASL-webapp/static/media/terms.32632ea1fea63e9dea00.md",
     "index.html": "/ASL-webapp/index.html",
     "main.e6c13ad2.css.map": "/ASL-webapp/static/css/main.e6c13ad2.css.map",
-    "main.fa6559d3.js.map": "/ASL-webapp/static/js/main.fa6559d3.js.map",
+    "main.be49f7f5.js.map": "/ASL-webapp/static/js/main.be49f7f5.js.map",
     "787.030fba0a.chunk.js.map": "/ASL-webapp/static/js/787.030fba0a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.fa6559d3.js"
+    "static/js/main.be49f7f5.js"
   ]
 }
