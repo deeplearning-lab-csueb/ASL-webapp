@@ -12,11 +12,13 @@ import signMap from '../sign_to_prediction_index_map.json';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import * as Facemesh from "@mediapipe/face_mesh";
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 // import * as Hands from "@mediapipe/hands";
 // import * as Pose from "@mediapipe/pose";
 import * as h from "@mediapipe/holistic";
 // faceLandmarks, poseLandmarks, leftHandLandmarks, rightHandLandmarks
 function AboutUs() {
+  const msg = new SpeechSynthesisUtterance()
   const backgroundDots = "/productCTAImageDots.png";
   const holisticRef = useRef(null);
   const webcamRef = useRef(null);
@@ -35,6 +37,10 @@ function AboutUs() {
 
   const decoder = (x) => p2sMap[x.dataSync()[0]];
 
+  const speechHandler = (msg) => {
+    msg.text = prediction
+    window.speechSynthesis.speak(msg)
+  }
 
   const loadASLmodel = async () => {
     detectionModel = await tf.loadGraphModel('https://asldetectionmodelversion2.s3.us-east-2.amazonaws.com/model.json')
@@ -112,13 +118,15 @@ function AboutUs() {
       // output.array().then(array => console.log(array));
       let sign = tf.argMax(output.flatten());
       let confidence = output.flatten().max().dataSync()[0];
-      if (parseFloat(confidence) < 0.6 || decoder(sign) === "shower" || decoder(sign) === "garbage") {
+      let pred = decoder(sign);
+      if (parseFloat(confidence) < 0.6 || pred === "shower" || pred === "garbage") {
         setPrediction("please try again!")
       } else {
-        setPrediction(decoder(sign))
+        setPrediction(pred);
+
       }
       // Get the maximum confidence value
-      console.log("result", decoder(sign), "confidence", confidence);
+      console.log("result", pred, "confidence", confidence);
 
       sequenceData = [];
     }
@@ -157,13 +165,15 @@ function AboutUs() {
       webcamRef.current && webcamRef.current.stop();
     };
   }, []);
-
+  useEffect(() => {
+    speechHandler(msg);
+  }, [prediction])
 
   return (
     <>
 
 
-      <Typography variant="h2" marked="center" align="center" component="h2" sx={{marginTop:"5 rem"}}>
+      <Typography variant="h2" marked="center" align="center" component="h2" sx={{ marginTop: "5 rem" }}>
         Try Signing below!
       </Typography>
       {/* <Typography variant="h6" marked="center" align="center" component="span" sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -173,9 +183,10 @@ function AboutUs() {
         Toggle Camera
       </Button> */}
       {/* {camera && <> */}
-      <Box sx={{marginTop:"20 px"}}></Box>
-      <Typography variant="h4" align="center" component="h4" sx={{display:"flex", justifyContent:"center", marginTop:"10 px", fontSize:"14 px"}}>
-      Prediction:<span style={{ color: '#3ab09e' }}> {prediction}</span>
+      <Box sx={{ marginTop: "20 px" }}></Box>
+      <Typography variant="h4" align="center" component="h4" sx={{ display: "flex", justifyContent: "center", marginTop: "10 px", fontSize: "14 px" }}>
+        Prediction:<span style={{ color: '#3ab09e' }}> {prediction}</span>
+        {/* <button onClick={() => speechHandler(msg)}><VolumeUpIcon /></button> */}
       </Typography>
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1, display: 'flex', justifyContent: 'center', flexDirection: 'column' }}
