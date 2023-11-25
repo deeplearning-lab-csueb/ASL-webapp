@@ -25,7 +25,8 @@ const AppAppBar = (props) => {
           // backgroundColor: "white",
           display: "block",
           background: "rgba(255, 255, 255, 0.9)",
-          padding: "0.5em 0em 0.1em 0em",
+          boxShadow: "0 7px 50px 0 rgba(0,0,0,0.2)",
+          padding: "0em 0em 0.1em 0em",
           height:"7%"
         }}
       >

@@ -35,11 +35,7 @@ const LANGUAGES = [
   {
     code: 'en-US',
     name: 'English',
-  },
-  {
-    code: 'fr-FR',
-    name: 'Français',
-  },
+  }
 ];
 
 export default function AppFooter() {
@@ -84,11 +80,11 @@ export default function AppFooter() {
                 <RouterLink to="/">Privacy</RouterLink>
               </Box> */}
               <Typography variant="body2" color="textSecondary">
-                &copy; {new Date().getFullYear()} ASL learning
+                 ASL learning
               </Typography>
-              <Typography variant="caption">
+              <Typography variant="caption">Video Source and Credits:
                 <MuiLink href="https://popsign.org" rel="sponsored" title="Freepik">
-                  Video Source:popsign.org
+                   Popsign.org
                 </MuiLink>
               </Typography>
             </Box>
@@ -112,7 +108,9 @@ export default function AppFooter() {
                 </option>
               ))}
             </TextField>
+            
           </Grid>
+          
           {/* <Grid item>
             <Typography variant="caption">
               {'Icons made by '}

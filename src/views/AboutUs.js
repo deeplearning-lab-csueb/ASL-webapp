@@ -172,67 +172,83 @@ function AboutUs() {
   return (
     <>
 
-
-      <Typography variant="h2" marked="center" align="center" component="h2" sx={{ marginTop: "5 rem" }}>
-        Try Signing below!
-      </Typography>
-      {/* <Typography variant="h6" marked="center" align="center" component="span" sx={{ display: 'flex', justifyContent: 'center' }}>
+      <Box sx={{ marginTop: "100 px" }}>
+        <Typography variant="h2" marked="center" align="center" component="h2" sx={{ marginTop: "5 rem" }}>
+          Try Signing below!
+        </Typography>
+        {/* <Typography variant="h6" marked="center" align="center" component="span" sx={{ display: 'flex', justifyContent: 'center' }}>
         Pridiction:
       </Typography> */}
-      {/* <Button varient="contained" onClick={() => setCamera(!camera)}>
+        {/* <Button varient="contained" onClick={() => setCamera(!camera)}>
         Toggle Camera
       </Button> */}
-      {/* {camera && <> */}
-      <Box sx={{ marginTop: "20 px" }}></Box>
-      <Typography variant="h4" align="center" component="h4" sx={{ display: "flex", justifyContent: "center", marginTop: "10 px", fontSize: "14 px" }}>
-        Prediction:<span style={{ color: '#3ab09e' }}> {prediction}</span>
-        {/* <button onClick={() => speechHandler(msg)}><VolumeUpIcon /></button> */}
-      </Typography>
-      <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1, display: 'flex', justifyContent: 'center', flexDirection: 'column' }}
-        open={loading}
-      // onClick={handleClose}
-      ><Typography variant="h3" align="center" component="span">
-          <p style={{ color: '#3ab09e' }}> Loading...</p>
+        {/* {camera && <> */}
+        <Box sx={{ marginTop: "20 px" }}></Box>
+        <Typography variant="h4" align="center" component="h4" sx={{ display: "flex", justifyContent: "center", marginTop: "10 px", fontSize: "14 px" }}>
+          Prediction:<span style={{ color: '#3ab09e' }}> {prediction}</span>
+          {/* <button onClick={() => speechHandler(msg)}><VolumeUpIcon /></button> */}
         </Typography>
-        <div><CircularProgress sx={{ color: "#3ab09e" }} /></div>
-      </Backdrop>
-      <Container component="section" sx={{ mt: 10, mb: 10, display: "flex", minHeight: '500px' }} id="try">
-        <center>
-          <div className="App">
-            <Webcam
-              ref={webcamRef}
-              style={{
-                position: "absolute",
-                marginLeft: "auto",
-                marginRight: "auto",
-                left: 0,
-                right: 0,
-                textAlign: "center",
-                zindex: 9,
-                width: 640,
-                height: 480,
-              }}
-            />{" "}
-            <canvas
-              ref={canvasRef}
-              className="output_canvas"
-              style={{
-                position: "absolute",
-                marginLeft: "auto",
-                marginRight: "auto",
-                left: 0,
-                right: 0,
-                textAlign: "center",
-                zindex: 9,
-                width: 640,
-                height: 480,
-              }}
-            ></canvas>
-          </div>
-        </center>
-      </Container>
-      {/* </>} */}
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1, display: 'flex', justifyContent: 'center', flexDirection: 'column' }}
+          open={loading}
+        // onClick={handleClose}
+        ><Typography variant="h3" align="center" component="span">
+            <p style={{ color: '#3ab09e' }}> Loading...</p>
+          </Typography>
+          <div><CircularProgress sx={{ color: "#3ab09e" }} /></div>
+        </Backdrop>
+        <Container component="section" sx={{ mt: 10, mb: 10, display: "flex", minHeight: '500px' }} id="try">
+          <center>
+            <div className="App">
+              <Webcam
+                ref={webcamRef}
+                style={{
+                  position: "absolute",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  left: 0,
+                  right: 0,
+                  textAlign: "center",
+                  zindex: 9,
+                  width: 640,
+                  height: 480,
+                }}
+              />{" "}
+              <canvas
+                ref={canvasRef}
+                className="output_canvas"
+                style={{
+                  position: "absolute",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  left: 0,
+                  right: 0,
+                  textAlign: "center",
+                  zindex: 9,
+                  width: 640,
+                  height: 480,
+                }}
+              ></canvas>
+            </div>
+          </center>
+        </Container>
+        {/* </>} */}
+        <Box sx={{ display: 'flex', justifyContent: "center", }}>
+          <Typography variant="h6" marked="left" gutterBottom>
+            Tips:
+          </Typography>
+          <Typography variant="body3" color="textSecondary">
+            <ol>
+              <li>Position yourself centrally within the camera’s frame, as demonstrated in the sample video.</li>
+              <li>Ensure that your hands, face, and pose are clearly visible.</li>
+              <li>If you see a message stating “PLEASE TRY AGAIN”, attempt to perform the signs once more.</li>
+              <li>You might also want to try the following signs: Hello, Aeroplane, and Zebra.</li>
+              <li>The underlying Neural Networks are capable of recognizing up to 250 distinct signs.</li>
+              <li>Please note that this website is currently in its Beta phase.</li>
+            </ol>
+          </Typography>
+        </Box>
+      </Box>
     </>
   );
 }
