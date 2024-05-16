@@ -83,8 +83,8 @@ export default function AppFooter() {
                  ASL learning
               </Typography>
               <Typography variant="caption">Video Source and Credits:
-                <MuiLink href="https://popsign.org" rel="sponsored" title="Freepik">
-                   Popsign.org
+                <MuiLink href="https://www.youtube.com/@babysignlanguage3678" rel="sponsored" title="Freepik">
+                   {/* Popsign.org */}babysignlanguage3678 Youtube Channel
                 </MuiLink>
               </Typography>
             </Box>

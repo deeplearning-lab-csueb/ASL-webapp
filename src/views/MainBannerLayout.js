@@ -16,6 +16,7 @@ import FormControl from '@mui/material/FormControl';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
+import MovieClip from '../components/MovieClip';
 
 const MainBannerLayoutRoot = styled('section')(({ theme }) => ({
   color: theme.palette.common.white,
@@ -44,7 +45,7 @@ const Background = styled(Box)(({ opacity }) => ({
 
 function MainBannerLayout(props) {
   const { sxBackground, children, backgroundOpacity } = props;
-  const [chartType, setChartType] = React.useState('Thirsty');
+  const [chartType, setChartType] = React.useState('Hello');
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
     setOpen(false);
@@ -57,24 +58,31 @@ function MainBannerLayout(props) {
   };
   const chooseVideo = (name) => {
     switch (name) {
-      case "Thirsty": return Thirsty; break;
-      case "hungry": return hungry; break;
-      case "brother": return brother; break;
-      case "Help": return help; break;
-      case "no": return no; break;
-      default: return Thirsty; break;
+      case "Thirsty": return "_L2jHqSgpds"; break;
+      case "hungry": return "nzHSI34GIbQ"; break;
+      case "brother": return "VKDjD9Gq-hE"; break;
+      case "Help": return "HgRpq8gEnC8"; break;
+      case "no": return "Li3gtgJyyII"; break;
+      case "Hello": return "xSYGBpalVTA"; break;
+      default: return "xSYGBpalVTA"; break;
     }
   };
 
   return (
     <MainBannerLayoutRoot>
+      
       <Typography variant="h4" marked="center" align="center" component="h2">
         PRACTICE
       </Typography>
-      <Box sx={{ display: "flex", justifyContent: "center", paddingTop: "1em" }}>
+      <Box sx={{ display: "flex", justifyContent: "center", paddingTop: "1em" }}><MovieClip videoId={chooseVideo(chartType)}></MovieClip></Box>
+
+
+
+
+      {/* <Box sx={{ display: "flex", justifyContent: "center", paddingTop: "1em" }}>
         <video src={chooseVideo(chartType)} autoPlay loop muted style={{ objectFit: 'contain', width: '70%', height: '10%', display: "block", boxShadow: "rgba(149, 157, 165, 0.2) 0px 8px 24px" }}>
           Your browser does not support the video tag.
-        </video></Box>
+        </video></Box> */}
       {/* <Button onClick={handleOpen}>Show backdrop</Button>
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -83,6 +91,7 @@ function MainBannerLayout(props) {
       >
         <CircularProgress color="inherit" />
       </Backdrop> */}
+      
       <Box sx={{ paddingTop: "1em", paddingBottom: "3em", display: "flex", justifyContent: "center" }}>
         <FormControl >
           <InputLabel id="demo-simple-select-label">ASL</InputLabel>
@@ -94,6 +103,7 @@ function MainBannerLayout(props) {
             onChange={handleChange}
             sx={{backgroundColor:"#3ab09e",color:"white"}}
           >
+            <MenuItem value={"Hello"}>Hello </MenuItem>
             <MenuItem value={"Thirsty"}>Thirsty</MenuItem>
             <MenuItem value={"no"}>No </MenuItem>
             <MenuItem value={"hungry"}>Hungry </MenuItem>

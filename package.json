@@ -42,6 +42,7 @@
     "react-spreadsheet": "^0.8.3",
     "react-spring": "^9.7.1",
     "react-webcam": "^7.1.1",
+    "react-youtube": "^10.1.0",
     "recharts": "^2.6.2",
     "use-count-up": "^3.0.1",
     "web-vitals": "^2.1.4"
