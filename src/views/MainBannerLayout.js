@@ -73,7 +73,7 @@ function MainBannerLayout(props) {
 
   return (
     <MainBannerLayoutRoot>
-      
+
       <Typography variant="h4" marked="center" align="center" component="h2">
         PRACTICE
       </Typography>
@@ -94,7 +94,7 @@ function MainBannerLayout(props) {
       >
         <CircularProgress color="inherit" />
       </Backdrop> */}
-      
+
       <Box sx={{ paddingTop: "1em", paddingBottom: "3em", display: "flex", justifyContent: "center" }}>
         <FormControl >
           <InputLabel id="demo-simple-select-label">ASL</InputLabel>
@@ -104,16 +104,16 @@ function MainBannerLayout(props) {
             value={chartType}
             label="Age"
             onChange={handleChange}
-            sx={{backgroundColor:"#3ab09e",color:"white"}}
+            sx={{ backgroundColor: "#3ab09e", color: "white", minWidth: '10em', display: 'flex', justifyContent: "center", alignContent: 'center' }}
           >
-            <ListSubheader sx={{color:"black", fontFace:"bold"}}>EASY</ListSubheader>
+            <ListSubheader sx={{ fontFace: "bold", backgroundColor: "#3ab09e", color: "white",  display: 'flex', justifyContent: "center", alignContent: 'center' }}>EASY</ListSubheader>
             <MenuItem value={"Hello"}>Hello </MenuItem>
             <MenuItem value={"Thirsty"}>Thirsty</MenuItem>
             <MenuItem value={"No"}>No </MenuItem>
             <MenuItem value={"Aeroplane"}>Aeroplane </MenuItem>
             <MenuItem value={"Hair"}>Hair </MenuItem>
 
-            <ListSubheader sx={{color:"black", fontFace:"bold"}}>HARD</ListSubheader>
+            <ListSubheader sx={{ fontFace: "bold", backgroundColor: "#3ab09e", color: "white",  display: 'flex', justifyContent: "center", alignContent: 'center' }}>HARD</ListSubheader>
             <MenuItem value={"Hungry"}>Hungry </MenuItem>
             <MenuItem value={"Brother"}>Brother  </MenuItem>
             <MenuItem value={"Help"}>Help  </MenuItem>
