@@ -17,6 +17,7 @@ import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
 import MovieClip from '../components/MovieClip';
+import ListSubheader from '@mui/material/ListSubheader';
 
 const MainBannerLayoutRoot = styled('section')(({ theme }) => ({
   color: theme.palette.common.white,
@@ -59,10 +60,12 @@ function MainBannerLayout(props) {
   const chooseVideo = (name) => {
     switch (name) {
       case "Thirsty": return "_L2jHqSgpds"; break;
-      case "hungry": return "nzHSI34GIbQ"; break;
-      case "brother": return "VKDjD9Gq-hE"; break;
+      case "Hungry": return "nzHSI34GIbQ"; break;
+      case "Brother": return "VKDjD9Gq-hE"; break;
       case "Help": return "HgRpq8gEnC8"; break;
-      case "no": return "Li3gtgJyyII"; break;
+      case "Hair": return "1cDVfYnnyeA"; break;
+      case "Aeroplane": return "V8pj4-oxr2o"; break;
+      case "No": return "Li3gtgJyyII"; break;
       case "Hello": return "xSYGBpalVTA"; break;
       default: return "xSYGBpalVTA"; break;
     }
@@ -103,11 +106,16 @@ function MainBannerLayout(props) {
             onChange={handleChange}
             sx={{backgroundColor:"#3ab09e",color:"white"}}
           >
+            <ListSubheader sx={{color:"black", fontFace:"bold"}}>EASY</ListSubheader>
             <MenuItem value={"Hello"}>Hello </MenuItem>
             <MenuItem value={"Thirsty"}>Thirsty</MenuItem>
-            <MenuItem value={"no"}>No </MenuItem>
-            <MenuItem value={"hungry"}>Hungry </MenuItem>
-            <MenuItem value={"brother"}>Brother  </MenuItem>
+            <MenuItem value={"No"}>No </MenuItem>
+            <MenuItem value={"Aeroplane"}>Aeroplane </MenuItem>
+            <MenuItem value={"Hair"}>Hair </MenuItem>
+
+            <ListSubheader sx={{color:"black", fontFace:"bold"}}>HARD</ListSubheader>
+            <MenuItem value={"Hungry"}>Hungry </MenuItem>
+            <MenuItem value={"Brother"}>Brother  </MenuItem>
             <MenuItem value={"Help"}>Help  </MenuItem>
           </Select>
         </FormControl></Box>

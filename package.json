@@ -1,6 +1,6 @@
 {
   "homepage": "http://deeplearning-lab-csueb.github.io/ASL-webapp",
-  "name": "brave-spaces",
+  "name": "ASL web application",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
