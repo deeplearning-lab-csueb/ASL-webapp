@@ -35,7 +35,10 @@ function AboutUs() {
     p2sMap[value] = key;
   }
 
-  const decoder = (x) => p2sMap[x.dataSync()[0]];
+  const decoder = (x) => {
+    console.log("Map key value",p2sMap);
+    console.log("p2sMap->>>", x.dataSync())
+    return p2sMap[x.dataSync()[0]]};
 
   const speechHandler = (msg) => {
     msg.text = prediction
@@ -43,7 +46,9 @@ function AboutUs() {
   }
 
   const loadASLmodel = async () => {
-    detectionModel = await tf.loadGraphModel('https://asldetectionmodelversion2.s3.us-east-2.amazonaws.com/model.json')
+    // detectionModel = await tf.loadGraphModel('https://asldetectionmodelversion2.s3.us-east-2.amazonaws.com/model.json')
+    detectionModel = await tf.loadGraphModel('https://asldetectionmodel.s3.us-east-2.amazonaws.com/model.json')
+
     console.log("model loaded")
   };
 
@@ -62,7 +67,7 @@ function AboutUs() {
 
   const onResults = async (results) => {
 
-    console.log(results);
+    // console.log(results);
     // const video = webcamRef.current.video;
     const videoWidth = webcamRef.current.video.videoWidth;
     const videoHeight = webcamRef.current.video.videoHeight;
@@ -112,19 +117,46 @@ function AboutUs() {
     sequenceData.push(landmarks);
     if (sequenceData.length === 50) {
       const tensorData = tf.tensor(sequenceData, [50, 543, 3], 'float32');
-      let output = await detectionModel.predictAsync(tensorData);
+      let output = await detectionModel.executeAsync(tensorData);
+      console.log("output", output.data());
+
       setLoading(false);
-      // output=tf.tensor(output, [250], 'float32');
-      // output.array().then(array => console.log(array));
       let sign = tf.argMax(output.flatten());
       let confidence = output.flatten().max().dataSync()[0];
       let pred = decoder(sign);
-      if (parseFloat(confidence) < 0.6 || pred === "shower" || pred === "garbage") {
-        setPrediction("please try again!")
-      } else {
+      // Flatten the output
+    // Flatten the output
+    // let p = output.flatten();
+    // console.log("Flattened Output:", p);
+
+    // // Get top-k predictions
+    // let topK = tf.topk(p, 5, true); // top 5 predictions
+    // let indices = topK.indices;
+    // let values = topK.values;
+    // console.log("Top K Indices Tensor:", indices);
+    // console.log("Top K Values Tensor:", values);
+
+    // // Convert tensors to arrays for further processing
+    // let indicesArray = await indices.data();
+    // let valuesArray = await values.data();
+    // console.log("Top K Indices Array:", indicesArray);
+    // console.log("Top K Values Array:", valuesArray);
+
+    // // Assuming `decoder` is a function that maps indices to labels
+    // let pred = decoder(indices); // Top-1 prediction
+    // let confidence = valuesArray[0]; // Top-1 confidence
+    // console.log("Predicted Sign:", pred, "Confidence:", confidence);
+
+
+
+
+
+      // if (parseFloat(confidence) < 5 || pred === "shower" || pred === "garbage") {
+      //   setPrediction("please try again!")
+      // } else {
         setPrediction(pred);
 
-      }
+      // }
       // Get the maximum confidence value
       console.log("result", pred, "confidence", confidence);
 
@@ -307,7 +339,8 @@ function AboutUs() {
   //   }
 
   //   const loadASLmodel = async () => {
-  //     detectionModel = await tf.loadGraphModel('https://asldetectionmodelversion2.s3.us-east-2.amazonaws.com/model.json')
+  //     // detectionModel = await tf.loadGraphModel('https://asldetectionmodelversion2.s3.us-east-2.amazonaws.com/model.json')
+  //     detectionModel = await tf.loadGraphModel('https://asldetectionmodel.s3.us-east-2.amazonaws.com/model.json')
   //     console.log("model loaded")
   //   };
 
@@ -321,6 +354,7 @@ function AboutUs() {
   //   };
 
   //   const onResults = async (results) => {
+  //     if (!detectionModel) return; 
   //     const videoWidth = webcamRef.current.video.videoWidth;
   //     const videoHeight = webcamRef.current.video.videoHeight;
 
@@ -347,7 +381,7 @@ function AboutUs() {
   //       let sign = tf.argMax(output.flatten());
   //       let confidence = output.flatten().max().dataSync()[0];
   //       let pred = decoder(sign);
-  //       if (parseFloat(confidence) < 0.6 || pred === "shower" || pred === "garbage") {
+  //       if (parseFloat(confidence) < 0.7 || pred === "shower" || pred === "garbage") {
   //         setPrediction("please try again!")
   //       } else {
   //         setPrediction(pred);
@@ -430,7 +464,8 @@ function AboutUs() {
   //       sequenceData.push(landmarks);
   //       if (sequenceData.length === 50) {
   //         const tensorData = tf.tensor(sequenceData, [50, 543, 3], 'float32');
-  //         let output = await detectionModel.predictAsync(tensorData);
+  //         let output = await detectionModel.predict(tensorData);
+  //         console.log("output", output);
   //         setLoading(false);
   //         let sign = tf.argMax(output.flatten());
   //         let confidence = output.flatten().max().dataSync()[0];
@@ -564,4 +599,3 @@ function AboutUs() {
   // }
 
   // export default AboutUs;
-
