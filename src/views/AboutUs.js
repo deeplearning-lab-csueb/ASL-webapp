@@ -1,9 +1,7 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import Typography from "../components/Typography";
-import { Button } from "@mui/material";
 import { Holistic } from "@mediapipe/holistic";
 import * as cam from "@mediapipe/camera_utils";
 import Webcam from "react-webcam";
@@ -11,45 +9,56 @@ import * as tf from "@tensorflow/tfjs";
 import signMap from '../sign_to_prediction_index_map.json';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-import * as Facemesh from "@mediapipe/face_mesh";
-import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-// import * as Hands from "@mediapipe/hands";
-// import * as Pose from "@mediapipe/pose";
-import * as h from "@mediapipe/holistic";
-// faceLandmarks, poseLandmarks, leftHandLandmarks, rightHandLandmarks
+
 function AboutUs() {
   const msg = new SpeechSynthesisUtterance()
-  const backgroundDots = "/productCTAImageDots.png";
+  // const backgroundDots = "/productCTAImageDots.png";
   const holisticRef = useRef(null);
   const webcamRef = useRef(null);
-  const canvasRef = useRef(null);
   const [prediction, setPrediction] = React.useState(null);
-  const [camera, setCamera] = React.useState(false);
+  // const [camera, setCamera] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
-  const connect = window.drawConnectors;
+  const [isRecording, setIsRecording] = useState(false); // State to control frame sending
+  const isRecordingRef = useRef(isRecording);
+  // const connect = window.drawConnectors;
   let sequenceData = []
   let detectionModel = null;
   let p2sMap = {};
 
   for (const [key, value] of Object.entries(signMap)) {
     p2sMap[value] = key;
-  }
+  };
+
+  // Update isProcessingRef.current whenever isProcessing changes. 
+  // This ensures the onFrame callback always has the latest value.
+  useEffect(() => {
+    isRecordingRef.current = isRecording;
+  }, [isRecording]); 
+
+  const toggleRecording = () => {
+    if (isRecording) {
+      setIsRecording(false);
+      isRecordingRef.current = false; // stop receiving new frames and start prediction
+    } else {
+      setPrediction(null); // clear out previous prediction
+      isRecordingRef.current = true;
+      setIsRecording(true);
+    }
+  };
 
   const decoder = (x) => {
-    console.log("Map key value",p2sMap);
-    console.log("p2sMap->>>", x.dataSync())
-    return p2sMap[x.dataSync()[0]]};
+    return p2sMap[x]};
 
   const speechHandler = (msg) => {
-    msg.text = prediction
-    window.speechSynthesis.speak(msg)
-  }
+    msg.text = prediction;
+    window.speechSynthesis.speak(msg);
+  };
 
   const loadASLmodel = async () => {
-    // detectionModel = await tf.loadGraphModel('https://asldetectionmodelversion2.s3.us-east-2.amazonaws.com/model.json')
-    detectionModel = await tf.loadGraphModel('https://asldetectionmodel.s3.us-east-2.amazonaws.com/model.json')
-
-    console.log("model loaded")
+    // detectionModel = await tf.loadGraphModel('https://asldetectionmodelversion2.s3.us-east-2.amazonaws.com/model.json') 
+    // detectionModel = await tf.loadGraphModel('https://asldetectionmodel.s3.us-east-2.amazonaws.com/model.json'); // new model (Ayushi)
+    detectionModel = await tf.loadGraphModel('https://aslnewmodel0701.s3.us-east-2.amazonaws.com/model.json'); // deepl new model
+    console.log("model loaded");
   };
 
   const extractCoordinates = (results) => {
@@ -66,104 +75,34 @@ function AboutUs() {
   };
 
   const onResults = async (results) => {
+    if (isRecordingRef.current) {
+      let landmarks = extractCoordinates(results);
+      sequenceData.push(landmarks);
+    } else {
+      const n_frames = sequenceData.length;
+      if (n_frames > 0) {
+        console.log("sequenceData length", n_frames);
+        console.log("sequenceData", sequenceData);
+        // make prediction
+        const tensorData = tf.tensor(sequenceData, [n_frames, 543, 3], 'float32');
+        let output = await detectionModel.executeAsync(tensorData); // output is a tensor here
+        output = output.softmax().dataSync(); // computer softmax -> output is an array
+        console.log("output data", output);
 
-    // console.log(results);
-    // const video = webcamRef.current.video;
-    const videoWidth = webcamRef.current.video.videoWidth;
-    const videoHeight = webcamRef.current.video.videoHeight;
-
-    // Set canvas width
-    canvasRef.current.width = videoWidth;
-    canvasRef.current.height = videoHeight;
-
-    const canvasElement = canvasRef.current;
-    const canvasCtx = canvasElement.getContext("2d");
-    canvasCtx.save();
-    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-    canvasCtx.drawImage(
-      results.image,
-      0,
-      0,
-      canvasElement.width,
-      canvasElement.height
-    );
-    // if (results.faceLandmarks) {
-    //   for (const landmarks of results.faceLandmarks) {
-    //     connect(canvasCtx, landmarks, Facemesh.FACEMESH_TESSELATION, {
-    //       color: "#C0C0C070",
-    //       lineWidth: 1,
-    //     });
-    //     connect(canvasCtx, landmarks, Facemesh.FACEMESH_RIGHT_EYE, {
-    //       color: "#FF3030",
-    //     });
-    //     connect(canvasCtx, landmarks, Facemesh.FACEMESH_RIGHT_EYEBROW, {
-    //       color: "#FF3030",
-    //     });
-    //     connect(canvasCtx, landmarks, Facemesh.FACEMESH_LEFT_EYE, {
-    //       color: "#30FF30",
-    //     });
-    //     connect(canvasCtx, landmarks, Facemesh.FACEMESH_LEFT_EYEBROW, {
-    //       color: "#30FF30",
-    //     });
-    //     connect(canvasCtx, landmarks, Facemesh.FACEMESH_FACE_OVAL, {
-    //       color: "#E0E0E0",
-    //     });
-    //     connect(canvasCtx, landmarks, Facemesh.FACEMESH_LIPS, {
-    //       color: "#E0E0E0",
-    //     });
-    //   }
-    // }
-    let landmarks = extractCoordinates(results);
-    sequenceData.push(landmarks);
-    if (sequenceData.length === 50) {
-      const tensorData = tf.tensor(sequenceData, [50, 543, 3], 'float32');
-      let output = await detectionModel.executeAsync(tensorData);
-      console.log("output", output.data());
-
-      setLoading(false);
-      let sign = tf.argMax(output.flatten());
-      let confidence = output.flatten().max().dataSync()[0];
-      let pred = decoder(sign);
-      // Flatten the output
-    // Flatten the output
-    // let p = output.flatten();
-    // console.log("Flattened Output:", p);
-
-    // // Get top-k predictions
-    // let topK = tf.topk(p, 5, true); // top 5 predictions
-    // let indices = topK.indices;
-    // let values = topK.values;
-    // console.log("Top K Indices Tensor:", indices);
-    // console.log("Top K Values Tensor:", values);
-
-    // // Convert tensors to arrays for further processing
-    // let indicesArray = await indices.data();
-    // let valuesArray = await values.data();
-    // console.log("Top K Indices Array:", indicesArray);
-    // console.log("Top K Values Array:", valuesArray);
-
-    // // Assuming `decoder` is a function that maps indices to labels
-    // let pred = decoder(indices); // Top-1 prediction
-    // let confidence = valuesArray[0]; // Top-1 confidence
-    // console.log("Predicted Sign:", pred, "Confidence:", confidence);
-
-
-
-
-
-      // if (parseFloat(confidence) < 5 || pred === "shower" || pred === "garbage") {
-      //   setPrediction("please try again!")
-      // } else {
+        // let sign = tf.argMax(output.flatten());
+        // let probability = output.flatten().max().dataSync()[0];
+        let probability = Math.max(...output);
+        let maxIndex = output.indexOf(probability);
+        let pred = decoder(maxIndex);
         setPrediction(pred);
-
-      // }
-      // Get the maximum confidence value
-      console.log("result", pred, "confidence", confidence);
-
-      sequenceData = [];
+        // Get the maximum confidence value
+        console.log("result:", pred, ", probability:", probability);
+        sequenceData = [];
+      }
     }
-    canvasCtx.restore();
-  }
+  }; // finish onResults function definition
+
+  ////////////////////////////////////////////
 
   useEffect(() => {
     loadASLmodel();
@@ -177,7 +116,6 @@ function AboutUs() {
       minTrackingConfidence: 0.5
     });
     holisticRef.current.onResults(onResults);
-    // console.log(holisticRef.current);
 
     if (
       typeof webcamRef.current !== "undefined" &&
@@ -186,20 +124,27 @@ function AboutUs() {
       webcamRef.current = new cam.Camera(webcamRef.current.video, {
         onFrame: async () => {
           await holisticRef.current.send({ image: webcamRef.current.video });
-
         },
         width: 640,
         height: 480,
       });
       webcamRef.current.start();
+      setLoading(false);
     }
     return () => {
       webcamRef.current && webcamRef.current.stop();
     };
   }, []);
+
+
+
   useEffect(() => {
-    speechHandler(msg);
-  }, [prediction])
+    if (prediction !== null){
+      speechHandler(msg);
+    }
+  }, [prediction]);
+
+
 
     return (
       <>
@@ -208,28 +153,25 @@ function AboutUs() {
           <Typography variant="h2" marked="center" align="center" component="h2" sx={{ marginTop: "5 rem" }}>
             Try Signing below!
           </Typography>
-          {/* <Typography variant="h6" marked="center" align="center" component="span" sx={{ display: 'flex', justifyContent: 'center' }}>
-          Pridiction:
-        </Typography> */}
-          {/* <Button varient="contained" onClick={() => setCamera(!camera)}>
-          Toggle Camera
-        </Button> */}
-          {/* {camera && <> */}
+
           <Box sx={{ marginTop: "20 px" }}></Box>
+
           <Typography variant="h4" align="center" component="h4" sx={{ display: "flex", justifyContent: "center", marginTop: "10 px", fontSize: "14 px" }}>
             Prediction:<span style={{ color: '#3ab09e' }}> {prediction}</span>
             {/* <button onClick={() => speechHandler(msg)}><VolumeUpIcon /></button> */}
           </Typography>
+
           <Backdrop
             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1, display: 'flex', justifyContent: 'center', flexDirection: 'column' }}
             open={loading}
-          // onClick={handleClose}
+
           ><Typography variant="h3" align="center" component="span">
               <p style={{ color: '#3ab09e' }}> Loading...</p>
             </Typography>
             <div><CircularProgress sx={{ color: "#3ab09e" }} /></div>
           </Backdrop>
-          <Container component="section" sx={{ mt: 10, mb: 10, display: "flex", minHeight: '500px' }} id="try">
+
+          <Container component="section" sx={{ mt: 5, mb: 0, display: "flex", minHeight: '500px' }} id="try">
             <center>
               <div className="App">
                 <Webcam
@@ -245,25 +187,21 @@ function AboutUs() {
                     width: 640,
                     height: 480,
                   }}
-                />{" "}
-                <canvas
-                  ref={canvasRef}
-                  className="output_canvas"
-                  style={{
-                    position: "absolute",
-                    marginLeft: "auto",
-                    marginRight: "auto",
-                    left: 0,
-                    right: 0,
-                    textAlign: "center",
-                    zindex: 9,
-                    width: 640,
-                    height: 480,
-                  }}
-                ></canvas>
+                /> 
               </div>
             </center>
           </Container>
+          
+          <div style={{ textAlign: "center"}}>
+            <button disabled={isRecording} onClick={toggleRecording}>
+              Start Recording
+            </button>
+
+            <button disabled={!isRecording} onClick={toggleRecording}>
+              Stop Recording
+            </button>
+          </div>
+
           {/* </>} */}
           <Box sx={{ display: 'flex', justifyContent: "center", }}>
             <Typography variant="h6" marked="left" gutterBottom>
@@ -283,7 +221,7 @@ function AboutUs() {
         </Box>
       </>
     );
-  }
+}; // end AboutUs
 
   export default AboutUs;
 
