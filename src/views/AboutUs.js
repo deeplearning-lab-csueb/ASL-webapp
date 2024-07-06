@@ -2,7 +2,8 @@ import React, { useRef, useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "../components/Typography";
-import { Holistic } from "@mediapipe/holistic";
+import { Holistic, POSE_CONNECTIONS, HAND_CONNECTIONS, FACEMESH_TESSELATION, FACEMESH_RIGHT_EYE, FACEMESH_RIGHT_EYEBROW, FACEMESH_LEFT_EYE, FACEMESH_LEFT_EYEBROW, FACEMESH_FACE_OVAL, FACEMESH_LIPS } from '@mediapipe/holistic';
+import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils';
 import * as cam from "@mediapipe/camera_utils";
 import Webcam from "react-webcam";
 import * as tf from "@tensorflow/tfjs";
@@ -15,6 +16,7 @@ function AboutUs() {
   // const backgroundDots = "/productCTAImageDots.png";
   const holisticRef = useRef(null);
   const webcamRef = useRef(null);
+  const canvasRef = useRef(null);
   const [prediction, setPrediction] = React.useState(null);
   // const [camera, setCamera] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
@@ -74,7 +76,34 @@ function AboutUs() {
     return concatenatedArray;
   };
 
+  const plotCanvas = async (results) => {
+    // https://github.com/google-ai-edge/mediapipe/blob/v0.10.10/docs/solutions/holistic.md
+    // https://codepen.io/mediapipe/pen/LYRRYEw
+    const canvasElement = canvasRef.current;
+    const canvasCtx = canvasElement.getContext('2d');
+    canvasCtx.save();
+    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    canvasCtx.drawImage(results.image, 0, 0, canvasElement.width, canvasElement.height);
+    canvasCtx.globalCompositeOperation = 'source-over';
+    drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, { color: '#1E90FF', lineWidth: 2 });
+    drawLandmarks(canvasCtx, results.poseLandmarks, { color: '#FF4500', lineWidth: 2, radius: 3 });
+    drawConnectors(canvasCtx, results.faceLandmarks, FACEMESH_TESSELATION, { color: '#C0C0C070', lineWidth: 1 });
+    drawConnectors(canvasCtx, results.faceLandmarks, FACEMESH_RIGHT_EYE, { color: 'rgb(0,217,231)' });
+    drawConnectors(canvasCtx, results.faceLandmarks, FACEMESH_RIGHT_EYEBROW, { color: 'rgb(0,217,231)' });
+    drawConnectors(canvasCtx, results.faceLandmarks, FACEMESH_LEFT_EYE, { color: 'rgb(255,138,0)' });
+    drawConnectors(canvasCtx, results.faceLandmarks, FACEMESH_LEFT_EYEBROW, { color: 'rgb(255,138,0)' });
+    drawConnectors(canvasCtx, results.faceLandmarks, FACEMESH_FACE_OVAL, { color: '#E0E0E0', lineWidth: 4 });
+    drawConnectors(canvasCtx, results.faceLandmarks, FACEMESH_LIPS, { color: '#E0E0E0', lineWidth: 2 });
+    drawConnectors(canvasCtx, results.leftHandLandmarks, HAND_CONNECTIONS, { color: 'white', lineWidth: 1 });
+    drawLandmarks(canvasCtx, results.leftHandLandmarks, { color: 'white', fillColor: 'rgb(255, 138, 0)', lineWidth: 0.5, radius: 4 });
+    drawConnectors(canvasCtx, results.rightHandLandmarks, HAND_CONNECTIONS, { color: 'white', lineWidth: 1 });
+    drawLandmarks(canvasCtx, results.rightHandLandmarks, { color: 'white', fillColor: 'rgb(0,217,231)', lineWidth: 0.5, radius: 4 });
+    canvasCtx.restore();
+  } ;
+
   const onResults = async (results) => {
+    plotCanvas(results);
+
     if (isRecordingRef.current) {
       let landmarks = extractCoordinates(results);
       sequenceData.push(landmarks);
@@ -112,6 +141,8 @@ function AboutUs() {
       }
     });
     holisticRef.current.setOptions({
+      modelComplexity: 1,
+      smoothLandmarks: true,
       minDetectionConfidence: 0.6,
       minTrackingConfidence: 0.5
     });
@@ -187,7 +218,23 @@ function AboutUs() {
                     width: 640,
                     height: 480,
                   }}
-                /> 
+                />
+                <canvas
+                  ref={canvasRef}
+                  className="output_canvas"
+                  style={{
+                    position: "absolute",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    left: 0,
+                    right: 0,
+                    textAlign: "center",
+                    zindex: 9,
+                    width: 640,
+                    height: 480,
+                  }}
+                ></canvas>
+                {/* <canvas ref={canvasRef} width={640} height={480}></canvas> */}
               </div>
             </center>
           </Container>
