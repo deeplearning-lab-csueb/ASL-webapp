@@ -46,7 +46,7 @@ const Background = styled(Box)(({ opacity }) => ({
 
 function MainBannerLayout(props) {
   const { sxBackground, children, backgroundOpacity } = props;
-  const [chartType, setChartType] = React.useState('Hello');
+  const [chartType, setChartType] = React.useState('Aeroplane');
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
     setOpen(false);
@@ -62,12 +62,18 @@ function MainBannerLayout(props) {
       case "Thirsty": return "_L2jHqSgpds"; break;
       case "Hungry": return "nzHSI34GIbQ"; break;
       case "Brother": return "VKDjD9Gq-hE"; break;
-      case "Help": return "HgRpq8gEnC8"; break;
+      // case "Help": return "HgRpq8gEnC8"; break;
       case "Hair": return "1cDVfYnnyeA"; break;
       case "Aeroplane": return "V8pj4-oxr2o"; break;
       case "No": return "Li3gtgJyyII"; break;
+      case "Yes": return "c0P1sW02-Aw"; break;
+      case "Up": return "fotnTKL9l7s"; break;
+      case "Police": return "GNzp4-uBjKI"; break;
+      case "High": return "dpC2IPJndYU"; break;
+      case "Before": return "tSj76ol99JQ"; break;
+      case "Giraffe": return "orRU3Ijv_mE"; break;
       case "Hello": return "xSYGBpalVTA"; break;
-      default: return "xSYGBpalVTA"; break;
+      default: return "V8pj4-oxr2o"; break; // Aeroplane
     }
   };
 
@@ -107,16 +113,22 @@ function MainBannerLayout(props) {
             sx={{ backgroundColor: "#3ab09e", color: "white", minWidth: '10em', display: 'flex', justifyContent: "center", alignContent: 'center' }}
           >
             <ListSubheader sx={{ fontFace: "bold", backgroundColor: "#3ab09e", color: "white",  display: 'flex', justifyContent: "center", alignContent: 'center' }}>EASY</ListSubheader>
-            <MenuItem value={"Hello"}>Hello </MenuItem>
-            <MenuItem value={"Thirsty"}>Thirsty</MenuItem>
-            <MenuItem value={"No"}>No </MenuItem>
-            <MenuItem value={"Aeroplane"}>Aeroplane </MenuItem>
-            <MenuItem value={"Hair"}>Hair </MenuItem>
+            <MenuItem value={"Aeroplane"}>Aeroplane</MenuItem>
+            <MenuItem value={"Before"}>Before</MenuItem>
+            <MenuItem value={"Giraffe"}>Giraffe</MenuItem>
+            <MenuItem value={"High"}>High</MenuItem>
+            <MenuItem value={"Police"}>Police</MenuItem>
+            <MenuItem value={"Up"}>Up</MenuItem>
 
             <ListSubheader sx={{ fontFace: "bold", backgroundColor: "#3ab09e", color: "white",  display: 'flex', justifyContent: "center", alignContent: 'center' }}>HARD</ListSubheader>
-            <MenuItem value={"Hungry"}>Hungry </MenuItem>
-            <MenuItem value={"Brother"}>Brother  </MenuItem>
-            <MenuItem value={"Help"}>Help  </MenuItem>
+            <MenuItem value={"Brother"}>Brother</MenuItem>
+            <MenuItem value={"Hair"}>Hair</MenuItem>
+            <MenuItem value={"Hello"}>Hello </MenuItem>
+            <MenuItem value={"Thirsty"}>Thirsty</MenuItem>
+            <MenuItem value={"Hungry"}>Hungry</MenuItem>
+            <MenuItem value={"No"}>No</MenuItem>
+            <MenuItem value={"Yes"}>Yes</MenuItem>
+            {/* <MenuItem value={"Help"}>Help  </MenuItem> */}
           </Select>
         </FormControl></Box>
     </MainBannerLayoutRoot>
